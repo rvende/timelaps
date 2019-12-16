@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-//import 'package:myapp/main.dart';
+import 'package:myapp/datetime_picker_formfield.dart';
 //import 'package:flutter/rendering.dart';
 
 
@@ -52,6 +52,7 @@ class ConfigState extends State<Config>{
       initialDate: _date,
       firstDate: DateTime(1970),
       lastDate: DateTime(2100),
+      locale: const Locale('fr', ''),
     );
     if(picked != null && picked != _date){
       
@@ -61,6 +62,7 @@ class ConfigState extends State<Config>{
       });
     }
   }
+  final format = DateFormat("dd-MM-yyyy HH:mm");
   @override
   Widget build(BuildContext context) {
   
@@ -73,13 +75,88 @@ class ConfigState extends State<Config>{
 
     ),
     body: Column(children: <Widget>[
-      Text('Configuration du nouveau Timelaps',style: TextStyle(fontWeight: FontWeight.bold)),
-      Text(new DateFormat("dd-MM-yyyy / HH:mm:ss").format(_date)),
-      RaisedButton(
-        child: Text('Choisir un jour'),
-        onPressed: (){selectDate(context);} ,)
+      Padding(padding: EdgeInsets.all(5.0),),
+      Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
+        
+        //(${format.pattern})
+      Text('Début du timelaps :  ',style: 
+                          TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold
+                            ),),
+                        
+      DateTimeField(
+        decoration: new InputDecoration(
+            icon: new Icon(Icons.calendar_today),),
+        format: format,
+        initialValue :  DateTime.now(),
+        onShowPicker: (context, currentValue) async {
+          final date = await showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
+              
+          if (date != null) {
+            final time = await showTimePicker(
+              context: context,
+              initialTime:
+                  TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+            );
+            return DateTimeField.combine(date, time);
+          } else {
+            return currentValue;
+          }
+        },
+      ),
+    ]),
+    Padding(padding: EdgeInsets.all(16.0),),
+    Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
+        
+        //(${format.pattern})
+      Text('Fin du timelaps :  ',style: 
+                          TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold
+                            ),),
+                        
+      DateTimeField(
+        decoration: new InputDecoration(
+            icon: new Icon(Icons.calendar_today),),
+        format: format,
+        initialValue :  DateTime.now(),
+        onShowPicker: (context, currentValue) async {
+          final date = await showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
+              
+          if (date != null) {
+            final time = await showTimePicker(
+              context: context,
+              initialTime:
+                  TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+            );
+            return DateTimeField.combine(date, time);
+          } else {
+            return currentValue;
+          }
+        },
+      ),
+    ])
     ],)
   );
   
   }
 }
+
+/*
+Text('Configuration du nouveau Timelaps',style: TextStyle(fontWeight: FontWeight.bold)),
+      Text(new DateFormat("dd-MM-yyyy / HH:mm:ss").format(_date)),
+      RaisedButton(
+        child: Text('Choisir un jour'),
+        onPressed: (){selectDate(context);} ,)
+ */
