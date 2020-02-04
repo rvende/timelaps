@@ -74,7 +74,8 @@ class ConfigState extends State<Config>{
         )
 
     ),
-    body: Column(children: <Widget>[
+    body: SingleChildScrollView(
+    child : Column(children: <Widget>[
       Padding(padding: EdgeInsets.all(5.0),),
       Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
         
@@ -146,9 +147,68 @@ class ConfigState extends State<Config>{
           }
         },
       ),
-    ])
+    ]),
+    Padding(padding: EdgeInsets.all(16.0),),
+    Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
+      
+        //(${format.pattern})
+      Text('Nom du timelapse :  ',style: 
+                          TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold
+                            ),),
+                        
+      TextFormField(
+        decoration: new InputDecoration(
+            icon: new Icon(Icons.camera),
+            labelText: "Entrer un nom"
+        ),
+      )
+    ,
+    ]),
+    Padding(padding: EdgeInsets.all(16.0),),
+    Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
+      
+        //(${format.pattern})
+      Text('Nombre de photo durant l\'interval :  ',style: 
+                          TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold
+                            ),),
+                        
+      TextFormField(
+        decoration: new InputDecoration(
+            icon: new Icon(Icons.settings_input_antenna),
+            labelText: "Entrer une fréquence",
+            
+        ),
+        keyboardType: TextInputType.number,
+        //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+      )
+    ,
+    ]),
+    Padding(padding: EdgeInsets.all(16.0),),
+    Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
+      
+        //(${format.pattern})
+      Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            RaisedButton(
+              padding: const EdgeInsets.all(8.0),
+              textColor: Colors.white,
+              color: Colors.orange,
+              onPressed: (){},
+              child: new Text("Demarrer"),
+            ),
+          ],
+          ),
+    
+    ]),
     ],)
-  );
+  ));
   
   }
 }
