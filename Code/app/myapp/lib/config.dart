@@ -1,39 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:myapp/datetime_picker_formfield.dart';
-//import 'package:flutter/rendering.dart';
+import 'package:myapp/dataStart.dart';
 
-
-
-
-/*class SecondRoute extends StatelessWidget {
-  SecondRoute({Key key, this.title}) : super(key: key);
-  static const String routeName = "/MyItemsPage";
-  final String title;
-
-  @override
-  
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Date-Time Picker example',
-      
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.orange,
-      ),
-      home: Config(),
-    );
-  }
-}
-*/
 class Config extends StatefulWidget{
   Config({Key key, this.title}) : super(key: key);
   static const String routeName = "/MyItemsPage";
@@ -45,7 +14,11 @@ class Config extends StatefulWidget{
 
 class ConfigState extends State<Config>{
   DateTime _date = DateTime.now();
-  
+  final myController1 = TextEditingController();
+  final myController2 = TextEditingController();
+  final myController3 = TextEditingController();
+  final myController4 = TextEditingController();
+
   Future<Null> selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
@@ -78,8 +51,6 @@ class ConfigState extends State<Config>{
     child : Column(children: <Widget>[
       Padding(padding: EdgeInsets.all(5.0),),
       Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-        
-        //(${format.pattern})
       Text('Début du timelaps :  ',style: 
                           TextStyle(
                             color: Colors.black,
@@ -88,6 +59,7 @@ class ConfigState extends State<Config>{
                             ),),
                         
       DateTimeField(
+        controller: myController1,
         decoration: new InputDecoration(
             icon: new Icon(Icons.calendar_today),),
         format: format,
@@ -114,8 +86,6 @@ class ConfigState extends State<Config>{
     ]),
     Padding(padding: EdgeInsets.all(16.0),),
     Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-        
-        //(${format.pattern})
       Text('Fin du timelaps :  ',style: 
                           TextStyle(
                             color: Colors.black,
@@ -124,6 +94,7 @@ class ConfigState extends State<Config>{
                             ),),
                         
       DateTimeField(
+        controller: myController2,
         decoration: new InputDecoration(
             icon: new Icon(Icons.calendar_today),),
         format: format,
@@ -150,8 +121,6 @@ class ConfigState extends State<Config>{
     ]),
     Padding(padding: EdgeInsets.all(16.0),),
     Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-      
-        //(${format.pattern})
       Text('Nom du timelapse :  ',style: 
                           TextStyle(
                             color: Colors.black,
@@ -160,6 +129,7 @@ class ConfigState extends State<Config>{
                             ),),
                         
       TextFormField(
+        controller: myController3,
         decoration: new InputDecoration(
             icon: new Icon(Icons.camera),
             labelText: "Entrer un nom"
@@ -169,8 +139,7 @@ class ConfigState extends State<Config>{
     ]),
     Padding(padding: EdgeInsets.all(16.0),),
     Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-      
-        //(${format.pattern})
+
       Text('Nombre de photo durant l\'interval :  ',style: 
                           TextStyle(
                             color: Colors.black,
@@ -179,20 +148,18 @@ class ConfigState extends State<Config>{
                             ),),
                         
       TextFormField(
+        controller: myController4,
         decoration: new InputDecoration(
             icon: new Icon(Icons.settings_input_antenna),
             labelText: "Entrer une fréquence",
             
         ),
         keyboardType: TextInputType.number,
-        //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
       )
     ,
     ]),
     Padding(padding: EdgeInsets.all(16.0),),
     Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-      
-        //(${format.pattern})
       Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -200,7 +167,68 @@ class ConfigState extends State<Config>{
               padding: const EdgeInsets.all(8.0),
               textColor: Colors.white,
               color: Colors.orange,
-              onPressed: (){},
+              onPressed: (){
+                if(myController1.text!='' && myController2.text != '' && myController3.text != '' && myController4.text != ''){
+                    var toto = DataStart(myController1.text,myController2.text,myController3.text,int.parse(myController4.text));
+                    print(toto.toJson());
+                    return showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          // Retrieve the text the user has entered by using the
+                          // TextEditingController.
+                          content: Text( "Date début : " +myController1.text +
+                          "\nDate fin : " +myController2.text+
+                          "\n Nom : " +myController3.text+
+                          "\n Nombre de photo : " +myController4.text ),
+                        );
+                      },
+                    );
+                }else{
+                  return showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          
+                          shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(20.0)), //this right here
+                          child: Container(
+                            height: 100,
+                            child: Column(children: <Widget>[
+                              
+                              TextField(
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    
+                                    hintText: 'Merci de compléter tous les champs !'),
+                                    style: 
+                                    TextStyle(
+                                      color: Colors.black,
+                                      //fontSize: 20.0,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                    textAlign: TextAlign.center,
+                              ),
+                              RaisedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  "Ok",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.grey,
+                              ),
+                            ],),
+                          ),
+                          
+                        );
+                      },
+                    );
+                }
+                
+              },
               child: new Text("Demarrer"),
             ),
           ],
@@ -212,11 +240,3 @@ class ConfigState extends State<Config>{
   
   }
 }
-
-/*
-Text('Configuration du nouveau Timelaps',style: TextStyle(fontWeight: FontWeight.bold)),
-      Text(new DateFormat("dd-MM-yyyy / HH:mm:ss").format(_date)),
-      RaisedButton(
-        child: Text('Choisir un jour'),
-        onPressed: (){selectDate(context);} ,)
- */

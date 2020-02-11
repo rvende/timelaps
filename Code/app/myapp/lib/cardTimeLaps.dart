@@ -12,7 +12,6 @@ class CardTimeLaps extends StatefulWidget{
 }
 
 class CardTimeLapsState extends State<CardTimeLaps>{
-  //String title;
   
   @override
   Widget build(BuildContext context) {
@@ -28,41 +27,44 @@ class CardTimeLapsState extends State<CardTimeLaps>{
                   Image(image: AssetImage(args.image)),
                   Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
       
-        //(${format.pattern})
+        
                       Row(
                         
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                             SfCartesianChart(
+                              legend: Legend(
+                                isVisible: true,
+                                position: LegendPosition.bottom,
+                                ),
                               title: ChartTitle(
                                 text: 'Température et hygrométrie du timelapse',
                               ),
                               primaryXAxis: CategoryAxis(),
                               series: <ChartSeries>[
-                                  // Initialize line series
-                                  LineSeries<SalesData, String>(
+                                  LineSeries<DataFetch, String>(
                                       dataSource: [
-                                          // Bind data source
-                                          SalesData('Lundi', 35),
-                                          SalesData('Mardi', 28),
-                                          SalesData('Mercredi', 34),
-                                          SalesData('Jeudi', 32),
-                                          SalesData('Vendredi', 40)
+                                          DataFetch('Lundi', 35),
+                                          DataFetch('Mardi', 28),
+                                          DataFetch('Mercredi', 34),
+                                          DataFetch('Jeudi', 32),
+                                          DataFetch('Vendredi', 40)
                                       ],
-                                      xValueMapper: (SalesData sales, _) => sales.year,
-                                      yValueMapper: (SalesData sales, _) => sales.sales
+                                      name: "Température",
+                                      xValueMapper: (DataFetch sales, _) => sales.year,
+                                      yValueMapper: (DataFetch sales, _) => sales.sales
                                   ),
-                                  LineSeries<SalesData, String>(
+                                  LineSeries<DataFetch, String>(
                                       dataSource: [
-                                          // Bind data source
-                                          SalesData('Lundi', 22),
-                                          SalesData('Mardi', 21),
-                                          SalesData('Mercredi', 19),
-                                          SalesData('Jeudi', 17),
-                                          SalesData('Vendredi', 15)
+                                          DataFetch('Lundi', 22),
+                                          DataFetch('Mardi', 21),
+                                          DataFetch('Mercredi', 19),
+                                          DataFetch('Jeudi', 17),
+                                          DataFetch('Vendredi', 15)
                                       ],
-                                      xValueMapper: (SalesData sales, _) => sales.year,
-                                      yValueMapper: (SalesData sales, _) => sales.sales
+                                      name: "Hygrométrie",
+                                      xValueMapper: (DataFetch sales, _) => sales.year,
+                                      yValueMapper: (DataFetch sales, _) => sales.sales
                                   )
                               ]
                             )
@@ -72,7 +74,6 @@ class CardTimeLapsState extends State<CardTimeLaps>{
               
             ),
             
-            //Text('Photos'),
             
             
           ),
@@ -89,8 +90,8 @@ class ScreenArguments {
   ScreenArguments(this.title, this.image);
 }
 
-class SalesData{
-        SalesData(this.year, this.sales);
+class DataFetch{
+        DataFetch(this.year, this.sales);
         final String year;
         final double sales;
-    }
+}
