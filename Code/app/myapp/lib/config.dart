@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:myapp/datetime_picker_formfield.dart';
 import 'package:myapp/dataStart.dart';
+import 'package:myapp/http_service.dart';
+
 
 class Config extends StatefulWidget{
   Config({Key key, this.title}) : super(key: key);
   static const String routeName = "/MyItemsPage";
   final String title;
   @override
-  ConfigState createState() => new ConfigState();
-  
+  ConfigState createState() => new ConfigState();  
 }
 
 class ConfigState extends State<Config>{
@@ -171,19 +172,20 @@ class ConfigState extends State<Config>{
                 if(myController1.text!='' && myController2.text != '' && myController3.text != '' && myController4.text != ''){
                     var toto = DataStart(myController1.text,myController2.text,myController3.text,int.parse(myController4.text));
                     print(toto.toJson());
-                    return showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          // Retrieve the text the user has entered by using the
-                          // TextEditingController.
-                          content: Text( "Date début : " +myController1.text +
-                          "\nDate fin : " +myController2.text+
-                          "\n Nom : " +myController3.text+
-                          "\n Nombre de photo : " +myController4.text ),
-                        );
-                      },
-                    );
+                    //var valid = false, response = fetchPost(toto, valid);
+                      return showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            // Retrieve the text the user has entered by using the
+                            // TextEditingController.
+                            content: Text( "Date début : " +myController1.text +
+                            "\nDate fin : " +myController2.text+
+                            "\n Nom : " +myController3.text+
+                            "\n Nombre de photo : " +myController4.text ),
+                          );
+                        },
+                      );
                 }else{
                   return showDialog(
                       context: context,
