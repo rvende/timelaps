@@ -34,6 +34,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // Future<Post> post;
+  
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   post = fetchPost();
+  // }
 
   Future<bool> _onBackPressed(){
         return showDialog(
