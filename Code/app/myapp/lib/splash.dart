@@ -10,7 +10,7 @@ class SplashScreen extends StatefulWidget{
 class _SplashScreenState extends State<SplashScreen>{
   void initState(){
     super.initState();
-    Timer(Duration(seconds: 8),()=> //print("Splash done"));
+    Timer(Duration(seconds: 3),()=> //print("Splash done"));
     Navigator.pushNamed(context, MyHomePage.routeName));
   }
   @override

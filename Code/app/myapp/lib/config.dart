@@ -4,13 +4,13 @@ import 'package:myapp/datetime_picker_formfield.dart';
 import 'package:myapp/dataStart.dart';
 import 'package:myapp/http_service.dart';
 
-
 class Config extends StatefulWidget{
   Config({Key key, this.title}) : super(key: key);
   static const String routeName = "/MyItemsPage";
   final String title;
   @override
-  ConfigState createState() => new ConfigState();  
+  ConfigState createState() => new ConfigState();
+  
 }
 
 class ConfigState extends State<Config>{
@@ -68,7 +68,8 @@ class ConfigState extends State<Config>{
         onShowPicker: (context, currentValue) async {
           final date = await showDatePicker(
               context: context,
-              firstDate: DateTime(1900),
+              firstDate: DateTime.now(),
+              //firstDate: DateTime(myController1.text),
               initialDate: currentValue ?? DateTime.now(),
               lastDate: DateTime(2100));
               
@@ -103,7 +104,7 @@ class ConfigState extends State<Config>{
         onShowPicker: (context, currentValue) async {
           final date = await showDatePicker(
               context: context,
-              firstDate: DateTime(1900),
+              firstDate: DateTime.now(),
               initialDate: currentValue ?? DateTime.now(),
               lastDate: DateTime(2100));
               
@@ -122,21 +123,43 @@ class ConfigState extends State<Config>{
     ]),
     Padding(padding: EdgeInsets.all(16.0),),
     Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
+      
+      
       Text('Nom du timelapse :  ',style: 
                           TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold
                             ),),
-                        
-      TextFormField(
+
+       Stack(
+            alignment: const Alignment(1.0, 1.0),
+            children: <Widget>[
+               TextField(
+                controller: myController3,
+                decoration: new InputDecoration(
+                    icon: new Icon(Icons.camera),
+                    labelText: "Entrer un nom"
+                ),
+              ),
+               FlatButton(
+                  onPressed: () {
+                     myController3.clear();
+                  },
+                  child: new Icon(Icons.clear))
+            ]
+        ),                
+      /*TextFormField(
         controller: myController3,
         decoration: new InputDecoration(
             icon: new Icon(Icons.camera),
             labelText: "Entrer un nom"
         ),
+
+        
+        
       )
-    ,
+    ,*/
     ]),
     Padding(padding: EdgeInsets.all(16.0),),
     Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
@@ -168,24 +191,65 @@ class ConfigState extends State<Config>{
               padding: const EdgeInsets.all(8.0),
               textColor: Colors.white,
               color: Colors.orange,
-              onPressed: (){
+              onPressed: () async{
                 if(myController1.text!='' && myController2.text != '' && myController3.text != '' && myController4.text != ''){
-                    var toto = DataStart(myController1.text,myController2.text,myController3.text,int.parse(myController4.text));
-                    print(toto.toJson());
-                    //var valid = false, response = fetchPost(toto, valid);
+                    var config = DataStart(myController1.text,myController2.text,myController3.text,int.parse(myController4.text));
+                    
+                    var resConf = await pushConfig(config);
+                    print("michel : ");
+                    print(resConf.retour);
+                    if(resConf.retour){
                       return showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
                             // Retrieve the text the user has entered by using the
                             // TextEditingController.
-                            content: Text( "Date début : " +myController1.text +
-                            "\nDate fin : " +myController2.text+
-                            "\n Nom : " +myController3.text+
-                            "\n Nombre de photo : " +myController4.text ),
+                            title: Center(
+                              child:
+                                Icon(Icons.check, color: Colors.green,)
+                                
+                            ),
+                            content: Text( "La configuration a bien été envoyée" ),
+                            actions: <Widget>[
+                                              FlatButton(
+                                                child: Text("OK"),
+                                                onPressed: () {
+                                                  //Put your code here which you want to execute on Yes button click.
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
                           );
                         },
                       );
+                    }else{
+                      return showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            // Retrieve the text the user has entered by using the
+                            // TextEditingController.
+                            title: Center(
+                              child:
+                                Icon(Icons.error, color: Colors.red,)
+                                
+                            ),
+                            content: Text( "Echec d'envoi de la configuration" ),
+                            actions: <Widget>[
+                                              FlatButton(
+                                                child: Text("OK"),
+                                                onPressed: () {
+                                                  //Put your code here which you want to execute on Yes button click.
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                          );
+                        },
+                      );
+                    }
+                    
                 }else{
                   return showDialog(
                       context: context,
@@ -238,7 +302,8 @@ class ConfigState extends State<Config>{
     
     ]),
     ],)
-  ));
+  )
+  );
   
   }
 }
