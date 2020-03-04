@@ -22,17 +22,52 @@ Future<void> fetchPost(DataStart toto, bool valid) async {
   }
 }
 
-Future<ReturnConfig> pushConfig(DataStart toto) async {
+/*Future<ReturnConfig> pushConfig(DataStart toto) async {
   final response = await
       http.get('http://192.168.1.69/app/config.php?dateDebut='+toto.dateDebut
+*/
+Future<bool> pushConfig(DataStart toto) async {
+return http.post("http://10.0.0.1/timelapses",body: {"start_date":toto.dateDebut,
+                                             "end_date":toto.dateFin,
+                                             "identifier":toto.nom,
+                                             "pictures_count":toto.nbPhoto.toString(),
+                                             "comment":" je sais pas quoi mettre comme commentaire! "}).then((http.Response response) {
+    final int statusCode = response.statusCode;
+    print('status code : '+statusCode.toString());
+    if (statusCode < 200 || statusCode > 400 || json == null) {
+      print("erreur dans fonc");
+      //throw new Exception("Error while fetching data");
+      return false;
+    }
+    print("ok dans fonc");
+    return true;
+  });
+}
+ /* final response = await
+      http.post("10.0.0.1/timelapses",body: {"start_date":toto.dateDebut,
+                                             "end_date":toto.dateFin,
+                                             "identifier":toto.nom,
+                                             "pictures_count":toto.nbPhoto.toString(),
+                                             "comment":" je sais pas quoi mettre comme commentaire! "}).then(http.Response response){
+
+                                             
+    final int statusCode = response.statusCode;
+ 
+    if (statusCode < 200 || statusCode > 400 || json == null) {
+      throw new Exception("Error while fetching data");
+    }
+    return Post.fromJson(json.decode(response.body));
+  });*/
+
+      /*http.get('http://192.168.1.69/app/config.php?dateDebut='+toto.dateDebut
                                       +'&dateFin='+toto.dateFin
                                       +'&nom='+toto.nom
-                                      +'&nbPhoto='+toto.nbPhoto.toString());
+                                      +'&nbPhoto='+toto.nbPhoto.toString());*/
       /*http.get('http://192.168.1.69/app/config.php?dateDebut='+toto.dateDebut
                                       +'&dateFin='+toto.dateFin
                                       +'&nom='+toto.nom);*/
 
-  if (response.statusCode == 200) {
+  /*if (response.statusCode == 200) {
     // If the server did return a 200 OK response, then parse the JSON.
     //return Post.fromJson(json.decode(response.body));
     print("ok");
@@ -46,8 +81,8 @@ Future<ReturnConfig> pushConfig(DataStart toto) async {
     //print("error");
     //return false;
     
-  }
-}
+  }*/
+/*}
 
 class ReturnConfig{
   final bool retour;
@@ -57,4 +92,4 @@ class ReturnConfig{
       retour: json['return'],
     );
   }
-}
+}*/

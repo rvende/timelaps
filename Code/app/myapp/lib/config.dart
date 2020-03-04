@@ -197,8 +197,8 @@ class ConfigState extends State<Config>{
                     
                     var resConf = await pushConfig(config);
                     print("michel : ");
-                    print(resConf.retour);
-                    if(resConf.retour){
+                    print(resConf);
+                    if(resConf){
                       return showDialog(
                         context: context,
                         builder: (context) {
