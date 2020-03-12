@@ -46,7 +46,7 @@ class CardTimeLapsState extends State<CardTimeLaps>{
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     
-                                    hintText: 'Erreur de connexion !'),
+                                    hintText: 'Impossible d\'afficher le timelapse !'),
                                     style: 
                                     TextStyle(
                                       color: Colors.black,
@@ -112,19 +112,68 @@ class TimelapseCardDyn extends StatelessWidget{
   final String title;
   final String image;*/
   final Color color = Colors.orange;
-  
+  goToDetailsPage(BuildContext context, String album) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (BuildContext context) => Dialog(
+              child: returnImage(album),
+            ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context){
       return Scaffold(
         appBar: AppBar(
           title: Text(tmlps.identifier),
         ),
-        body: Container(
+        body: SingleChildScrollView(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                   returnImage(image),
                   Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
+
+                    Row(
+                      //margin: EdgeInsets.all(10.0),
+                      
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(10.0),
+                          //color: Colors.blue,
+                          
+                          height: 300,
+                          width: MediaQuery.of(context).size.width-20,
+                          child: GridView.count(
+                                    scrollDirection: Axis.horizontal,
+                                    crossAxisCount: 4,
+                                    
+                                    children: tmlps.links.map((String url) {
+                                      return Container(
+                                                        //padding: EdgeInsets.all(20.0),
+                                                        
+                                                          child: GridTile(
+                                                            child : InkResponse(
+                                                                child: Image.network(url, fit: BoxFit.cover),
+                                                                onTap: (){
+                                                                 goToDetailsPage(context,url);
+                                                                },
+                                                              )
+                                                            
+                                                            //onTap: 
+                                                          ),
+                                                        
+                                                        //color: Colors.blue[400],
+                                                        margin: EdgeInsets.all(0.7),
+                                                      );
+                                      
+                                    }).toList()),
+                                    
+                                
+                        ),]
+                    ),
       
         
                       Row(
@@ -143,7 +192,7 @@ class TimelapseCardDyn extends StatelessWidget{
                               series: <ChartSeries>[
                                   LineSeries<DataFetch, String>(
                                       dataSource: [
-                                          DataFetch('Lundi', 35),
+                                          DataFetch('Lundi', 10),
                                           DataFetch('Mardi', 28),
                                           DataFetch('Mercredi', 34),
                                           DataFetch('Jeudi', 32),
