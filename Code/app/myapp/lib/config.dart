@@ -195,10 +195,16 @@ class ConfigState extends State<Config>{
                 if(myController1.text!='' && myController2.text != '' && myController3.text != '' && myController4.text != ''){
                     var config = DataStart(myController1.text,myController2.text,myController3.text,int.parse(myController4.text));
                     
-                    var resConf = await pushConfig(config);
-                    print("michel : ");
-                    print(resConf);
-                    if(resConf){
+                    try{
+                      var resConf = await pushConfig(config);
+                      print("michel : ");
+                      print(resConf.statusCode);
+                    }catch(Exception){
+                      print("erreur");
+                    }
+                    
+
+                    /*if(resConf){
                       return showDialog(
                         context: context,
                         builder: (context) {
@@ -248,7 +254,7 @@ class ConfigState extends State<Config>{
                           );
                         },
                       );
-                    }
+                    }*/
                     
                 }else{
                   return showDialog(

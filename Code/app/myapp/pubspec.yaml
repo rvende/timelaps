@@ -26,6 +26,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   syncfusion_flutter_charts: ^1.0.0-beta.3
   http: 0.12.0+4
+  wifi_iot:
+    git: https://github.com/alternadom/WiFiFlutter.git
 
 dev_dependencies:
   flutter_test:
