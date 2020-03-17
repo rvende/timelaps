@@ -98,7 +98,7 @@ class ScreenArguments {
 class DataFetch{
         DataFetch(this.year, this.sales);
         final String year;
-        final double sales;
+        final int sales;
 }
 
 class TimelapseCardDyn extends StatelessWidget{
@@ -108,6 +108,8 @@ class TimelapseCardDyn extends StatelessWidget{
   static const double innerPadding = 20.0;
   static const double opacity = 0.75;
   static const double size = 250.0;
+  static List<DataFetch> temperatures;
+  static List<DataFetch> humidites;
   /*final bool isLeft;
   final String title;
   final String image;*/
@@ -125,6 +127,15 @@ class TimelapseCardDyn extends StatelessWidget{
   }
   @override
   Widget build(BuildContext context){
+    print("Measures : ");
+    print(tmlps.measures);
+    temperatures = new List<DataFetch>();
+    humidites = new List<DataFetch>();
+    for(int i = 0; i <tmlps.measures.length;i++){
+        temperatures.add(new DataFetch((i+1).toString(), tmlps.measures[i].temp ));
+        humidites.add(new DataFetch((i+1).toString(), tmlps.measures[i].humi ));
+    }
+    
       return Scaffold(
         appBar: AppBar(
           title: Text(tmlps.identifier),
@@ -146,7 +157,9 @@ class TimelapseCardDyn extends StatelessWidget{
                           
                           height: 300,
                           width: MediaQuery.of(context).size.width-20,
-                          child: GridView.count(
+                          child: 
+                          
+                          GridView.count(
                                     scrollDirection: Axis.horizontal,
                                     crossAxisCount: 4,
                                     
@@ -180,6 +193,7 @@ class TimelapseCardDyn extends StatelessWidget{
                         
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
+                          tmlps.measures.length != 0 ?
                             SfCartesianChart(
                               legend: Legend(
                                 isVisible: true,
@@ -189,33 +203,24 @@ class TimelapseCardDyn extends StatelessWidget{
                                 text: 'Température et hygrométrie du timelapse',
                               ),
                               primaryXAxis: CategoryAxis(),
+                              
                               series: <ChartSeries>[
                                   LineSeries<DataFetch, String>(
-                                      dataSource: [
-                                          DataFetch('Lundi', 10),
-                                          DataFetch('Mardi', 28),
-                                          DataFetch('Mercredi', 34),
-                                          DataFetch('Jeudi', 32),
-                                          DataFetch('Vendredi', 40)
-                                      ],
+                                      dataSource: 
+                                          temperatures,
+                                      
                                       name: "Température",
                                       xValueMapper: (DataFetch sales, _) => sales.year,
                                       yValueMapper: (DataFetch sales, _) => sales.sales
                                   ),
                                   LineSeries<DataFetch, String>(
-                                      dataSource: [
-                                          DataFetch('Lundi', 22),
-                                          DataFetch('Mardi', 21),
-                                          DataFetch('Mercredi', 19),
-                                          DataFetch('Jeudi', 17),
-                                          DataFetch('Vendredi', 15)
-                                      ],
+                                      dataSource: humidites,
                                       name: "Hygrométrie",
                                       xValueMapper: (DataFetch sales, _) => sales.year,
                                       yValueMapper: (DataFetch sales, _) => sales.sales
                                   )
                               ]
-                            )
+                            ) : Text("Aucun graphique à afficher"),
                           ])
                         ]),
               ],

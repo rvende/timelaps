@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:myapp/measure.dart';
 
 class TimelapseData extends Object {
 
@@ -15,6 +16,7 @@ class TimelapseData extends Object {
   DateTime creation;
 
   List<String> links;
+  List<Measure> measures;
 
 
   TimelapseData({
@@ -29,10 +31,12 @@ class TimelapseData extends Object {
     this.startDate,
     this.endDate,
     this.creation,
-    this.links    
+    this.links,
+    this.measures
   });
 
   factory TimelapseData.fromJson(Map<String, dynamic> json) {
+    
     return new TimelapseData(
       active: json['active'] as bool,
       id: json['id'] as int,
@@ -41,6 +45,8 @@ class TimelapseData extends Object {
       comment: json['comment'] as String,
       links: json['taken_pictures']["links"].map<String>((data) => 
                data.toString()).toList() as List<String>,
+      measures: json['sensor_measures'].map<Measure>((data) => 
+               Measure.fromJson(data)).toList() as List<Measure>,
     );
   }
 }

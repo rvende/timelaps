@@ -85,9 +85,11 @@ Future<TimelapseData> getTimelapse(int id) async{
     //var list = rest.map<TimelapseData>((json)=>TimelapseData.fromJson(json));
     //for (String id in list)
     //list.length;
-    /*for(int i=0;i<list.length;i++){
-      print(list[i].identifier);
+    
+    /*for(int i=0;i<res.measures.length;i++){
+      print(res.measures[i].temp);
     }*/
+    
 
     return res;
     
