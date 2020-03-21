@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:myapp/cardImages.dart';
+//import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:myapp/http_service.dart';
 import 'package:myapp/TimelapseData.dart';
+import 'package:myapp/cardVideo.dart';
+import 'package:myapp/DataFetch.dart';
+import 'package:myapp/cardGraph.dart';
+import 'package:myapp/cardInfos.dart';
 
 class CardTimeLaps extends StatefulWidget{
   CardTimeLaps({Key key, this.title}) : super(key: key);
@@ -95,11 +100,7 @@ class ScreenArguments {
   ScreenArguments(this.id, this.image);
 }
 
-class DataFetch{
-        DataFetch(this.year, this.sales);
-        final String year;
-        final int sales;
-}
+
 
 class TimelapseCardDyn extends StatelessWidget{
   final TimelapseData tmlps;
@@ -114,21 +115,15 @@ class TimelapseCardDyn extends StatelessWidget{
   final String title;
   final String image;*/
   final Color color = Colors.orange;
-  goToDetailsPage(BuildContext context, String album) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        fullscreenDialog: true,
-        builder: (BuildContext context) => Dialog(
-              child: returnImage(album),
-            ),
-      ),
-    );
-  }
+  
+  
+  
+
+
   @override
   Widget build(BuildContext context){
-    print("Measures : ");
-    print(tmlps.measures);
+    //print("Measures : ");
+    //print(tmlps.startDate);
     temperatures = new List<DataFetch>();
     humidites = new List<DataFetch>();
     for(int i = 0; i <tmlps.measures.length;i++){
@@ -136,101 +131,41 @@ class TimelapseCardDyn extends StatelessWidget{
         humidites.add(new DataFetch((i+1).toString(), tmlps.measures[i].humi ));
     }
     
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(tmlps.identifier),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                  returnImage(image),
-                  Column(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-
-                    Row(
-                      //margin: EdgeInsets.all(10.0),
-                      
-                      children: [
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          //color: Colors.blue,
-                          
-                          height: 300,
-                          width: MediaQuery.of(context).size.width-20,
-                          child: 
-                          
-                          GridView.count(
-                                    scrollDirection: Axis.horizontal,
-                                    crossAxisCount: 4,
-                                    
-                                    children: tmlps.links.map((String url) {
-                                      return Container(
-                                                        //padding: EdgeInsets.all(20.0),
-                                                        
-                                                          child: GridTile(
-                                                            child : InkResponse(
-                                                                child: Image.network(url, fit: BoxFit.cover),
-                                                                onTap: (){
-                                                                 goToDetailsPage(context,url);
-                                                                },
-                                                              )
-                                                            
-                                                            //onTap: 
-                                                          ),
-                                                        
-                                                        //color: Colors.blue[400],
-                                                        margin: EdgeInsets.all(0.7),
-                                                      );
-                                      
-                                    }).toList()),
-                                    
-                                
-                        ),]
-                    ),
-      
-        
-                      Row(
-                        
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          tmlps.measures.length != 0 ?
-                            SfCartesianChart(
-                              legend: Legend(
-                                isVisible: true,
-                                position: LegendPosition.bottom,
-                                ),
-                              title: ChartTitle(
-                                text: 'Température et hygrométrie du timelapse',
-                              ),
-                              primaryXAxis: CategoryAxis(),
-                              
-                              series: <ChartSeries>[
-                                  LineSeries<DataFetch, String>(
-                                      dataSource: 
-                                          temperatures,
-                                      
-                                      name: "Température",
-                                      xValueMapper: (DataFetch sales, _) => sales.year,
-                                      yValueMapper: (DataFetch sales, _) => sales.sales
-                                  ),
-                                  LineSeries<DataFetch, String>(
-                                      dataSource: humidites,
-                                      name: "Hygrométrie",
-                                      xValueMapper: (DataFetch sales, _) => sales.year,
-                                      yValueMapper: (DataFetch sales, _) => sales.sales
-                                  )
-                              ]
-                            ) : Text("Aucun graphique à afficher"),
-                          ])
-                        ]),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DefaultTabController(
+        length: 4,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(tmlps.identifier),
+            bottom: TabBar(
+              isScrollable: false,
+              tabs: <Widget>[
+                new Tab(icon: new Icon(Icons.videocam)),
+                new Tab(icon: new Icon(Icons.photo_size_select_actual)),
+                new Tab(icon: new Icon(Icons.show_chart)),
+                new Tab(icon: new Icon(Icons.info)),
               ],
-              
             ),
-            
-            
-            
+            leading: IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:() => Navigator.pop(context),
+            ),
+            backgroundColor: Colors.orange,
           ),
-        
-      );
+          body: TabBarView(
+            children: [
+              new CardVideo(image),
+              new CardImages(tmlps.links),
+              new CardGraph(tmlps.measures),
+              new CardInfos(tmlps.active,tmlps.picturesCountTotal,tmlps.picturesCountActual,tmlps.comment,tmlps.startDate.toString(),tmlps.endDate.toString(),tmlps.creation.toString(),tmlps.id),
+            ]
+            ),
+        ),
+      ),
+    
+
+    );
+      
+      
   }
 }

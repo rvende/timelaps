@@ -34,6 +34,16 @@ Image returnImage(String url){
     return Image.network(url);
 }
 
+Future<bool> deleteTimelapse(int id) async{
+  WiFiForIoTPlugin.forceWifiUsage(true);
+  String url = "http://10.0.0.1/timelapses/";
+  final response = await http.delete(url+id.toString());
+  if (response.statusCode == 200) {
+    return true;
+  }
+  return false;
+}
+
 
 Future<List<TimelapsesData>> getAllTimelapses() async{
   WiFiForIoTPlugin.forceWifiUsage(true);
@@ -127,7 +137,7 @@ Future<http.Response> pushConfig(DataStart toto) async {
   if (res.statusCode == 200) {
     // If the server did return a 200 OK response, then parse the JSON.
     //return Post.fromJson(json.decode(response.body));
-    print("ok");
+    //print("ok");
     //return true;
     return json.decode(res.body);
 

@@ -6,14 +6,15 @@ class TimelapseData extends Object {
   bool active;
 
   int id;
-  int picturesCount;
+  int picturesCountTotal;
+  int picturesCountActual;
 
   String identifier;
   String comment;
 
-  DateTime startDate;
-  DateTime endDate;
-  DateTime creation;
+  String startDate;
+  String endDate;
+  String creation;
 
   List<String> links;
   List<Measure> measures;
@@ -23,7 +24,8 @@ class TimelapseData extends Object {
     this.active,
 
     this.id,
-    this.picturesCount,
+    this.picturesCountTotal,
+    this.picturesCountActual,
 
     this.identifier,
     this.comment,
@@ -40,7 +42,11 @@ class TimelapseData extends Object {
     return new TimelapseData(
       active: json['active'] as bool,
       id: json['id'] as int,
-      picturesCount: json["pictures_count"] as int,
+      picturesCountTotal: json["pictures_count"] as int,
+      picturesCountActual: json["taken_pictures"]["count"] as int,
+      startDate: json["start_date"] as String,
+      endDate: json["end_date"] as String,
+      creation: json["created_at"],
       identifier: json['identifier'] as String,
       comment: json['comment'] as String,
       links: json['taken_pictures']["links"].map<String>((data) => 
